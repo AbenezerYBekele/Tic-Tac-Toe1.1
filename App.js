@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Alert } from 'react-native';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  Alert,
+} from "react-native";
 
-const backgroundImage = require('./background.jpg');
+const backgroundImage = require("./background.jpg");
 
 const App = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
-  const [currentPlayer, setCurrentPlayer] = useState('X');
+  const [currentPlayer, setCurrentPlayer] = useState("X");
   const [winner, setWinner] = useState(null);
 
   const checkWinner = () => {
@@ -25,104 +32,118 @@ const App = () => {
         return board[a];
       }
     }
-    if (board.every(square => square !== null)) {
-      return 'Tie';
+    if (board.every((square) => square !== null)) {
+      return "Tie";
     }
     return null;
   };
 
-  const handlePress = index => {
+  const handlePress = (index) => {
     if (winner) {
-      resetGame();
-    } else if (!winner && !board[index]) {
+      Alert.alert("Game Over", `The game has already ended! Winner: ${winner}`);
+      return;
+    }
+    if (!board[index]) {
       const newBoard = [...board];
       newBoard[index] = currentPlayer;
       setBoard(newBoard);
-      const nextPlayer = currentPlayer === 'X' ? 'O' : 'X';
-      setCurrentPlayer(nextPlayer);
-      const gameWinner = checkWinner();
+
+      const gameWinner = checkWinner(newBoard);
       if (gameWinner) {
         setWinner(gameWinner);
+        Alert.alert(
+          "Game Over",
+          gameWinner === "Tie" ? "It's a Tie!" : `Winner: ${gameWinner}`
+        );
+        return;
       }
+
+      setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
     }
   };
 
   const resetGame = () => {
     setBoard(Array(9).fill(null));
-    console.log(board);  // Should log an array of 9 null values
-    setCurrentPlayer('X');
-    console.log(currentPlayer);  // Should log 'X'
+    setCurrentPlayer("X");
     setWinner(null);
-    console.log(winner);  // Should log null
   };
 
   const renderSquare = (index) => {
     return (
-        <TouchableOpacity style={styles.square} onPress={() => handlePress(index)}>
-          <Text style={styles.squareText}>{board[index]}</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        key={index}
+        style={styles.square}
+        onPress={() => handlePress(index)}
+      >
+        <Text style={styles.squareText}>{board[index]}</Text>
+      </TouchableOpacity>
     );
   };
 
   return (
-      <ImageBackground source={backgroundImage} style={styles.container}>
-        <TouchableOpacity style={styles.newGameButton} onPress={resetGame}>
-          <Text style={styles.buttonText}>New Game</Text>
-        </TouchableOpacity>
-        <View style={styles.board}>
-          {board.map((square, index) => renderSquare(index))}
-        </View>
+    <ImageBackground source={backgroundImage} style={styles.container}>
+      <TouchableOpacity style={styles.newGameButton} onPress={resetGame}>
+        <Text style={styles.buttonText}>New Game</Text>
+      </TouchableOpacity>
+      <View style={styles.board}>
+        {board.map((_, index) => renderSquare(index))}
+      </View>
+      {winner && (
         <Text style={styles.gameOver}>
-          {winner ? (winner === 'Tie' ? "It's a Tie!" : `Winner: ${winner}`) : ''}
+          {winner === "Tie" ? "It's a Tie!" : `Winner: ${winner}`}
         </Text>
-      </ImageBackground>
+      )}
+    </ImageBackground>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
   },
   board: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    width: 300,
+    height: 300,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    borderRadius: 10,
+    overflow: "hidden",
   },
   square: {
     width: 100,
     height: 100,
-    paddingVertical:20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#fff",
   },
   squareText: {
-    fontSize: 50,
-    fontWeight: 'bold',
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "#fff",
   },
   gameOver: {
     marginTop: 20,
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#000",
   },
   newGameButton: {
-    marginTop: 20,
     marginBottom: 20,
-    backgroundColor: 'blue',
+    backgroundColor: "#007bff",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
   buttonText: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
   },
-
 });
 
 export default App;
