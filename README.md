@@ -1,6 +1,6 @@
 # Tic Tac Toe Mobile Game
 
-Welcome to our simple Tic Tac Toe mobile game developed using React Native for Android and iOS. This game features a classic 3x3 grid where two players take turns marking spaces. Winner Detection is automatically handled, determining the winner or declaring a tie based on the moves made
+Welcome to simple Tic Tac Toe mobile game developed using React Native for Android and iOS. This game features a classic 3x3 grid where two players take turns marking spaces. Winner Detection is automatically handled, determining the winner or declaring a tie based on the moves made
 
 ## Getting Started
 1. Clone this repository: `git clone https://github.com/AbeBekele12/Tic-Tac-Toe1.1.git`
