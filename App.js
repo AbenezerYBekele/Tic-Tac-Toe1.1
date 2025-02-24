@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Alert,
 } from "react-native";
+import styles from "./styles";
 
 const backgroundImage = require("./background.jpg");
 
